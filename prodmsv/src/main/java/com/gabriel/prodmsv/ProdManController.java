@@ -1,7 +1,7 @@
 package com.gabriel.prodmsv;
 
-import com.gabriel.prodmsv.ServiceImpl.ProductService;
-import com.gabriel.prodmsv.model.Product;
+import com.gabriel.prodmsv.ServiceImpl.ContactService;
+import com.gabriel.prodmsv.model.Contact;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,10 +34,11 @@ public class ProdManController implements Initializable {
     @Setter
     Scene deleteViewScene;
 
-    public TextField tfId;
-    public TextField tfName;
-    public TextField tfDesc;
-    public ImageView productImage;
+    public TextField tfFirstName;
+    public TextField tfLastName;
+    public TextField tfEmail;
+    public TextField tfPhone;
+    public ImageView contactImage;
     public VBox prodman;
 
     Image puffy;
@@ -52,21 +53,22 @@ public class ProdManController implements Initializable {
     @FXML
     public Button closeButton;
 
-    public static Product product;
+    public static Contact contact;
     @FXML
-    private ListView<Product> lvProducts;
+    private ListView<Contact> lvContacts;
 
-    UpdateProductController updateProductController;
-    DeleteProductController deleteProductController;
-    CreateProductController createProductController;
-    ProductService productService;
+    UpdateContactController updateContactController;
+    DeleteContactController deleteContactController;
+    CreateContactController createContactController;
+    ContactService contactService;
 
     void refresh() throws Exception {
-        productService = ProductService.getService();
-        Product[] products = productService.getProducts();
-        lvProducts.getItems().clear();
-        lvProducts.getItems().addAll(products);
+        contactService = ContactService.getService();
+        Contact[] contacts = contactService.getContacts(); // Updated method name
+        lvContacts.getItems().clear();
+        lvContacts.getItems().addAll(contacts);
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,7 +80,7 @@ public class ProdManController implements Initializable {
             try {
                 puffy = new Image(getClass().getResourceAsStream("/images/puffy.gif"));
                 wink = new Image(getClass().getResourceAsStream("/images/wink.gif"));
-                productImage.setImage(puffy);
+                contactImage.setImage(puffy);
             } catch(Exception ex) {
                 System.out.println("Error with image: " + ex.getMessage());
             }
@@ -88,56 +90,59 @@ public class ProdManController implements Initializable {
     }
 
     public void disableControls() {
-        tfId.editableProperty().set(false);
-        tfName.editableProperty().set(false);
-        tfDesc.editableProperty().set(false);
+        tfFirstName.editableProperty().set(false);
+        tfLastName.editableProperty().set(false);
+        tfEmail.editableProperty().set(false);
+        tfPhone.editableProperty().set(false);
     }
 
-    public void setControlTexts(Product product) {
-        tfName.setText(product.getName());
-        tfDesc.setText(product.getDescription());
+    public void setControlTexts(Contact contact) {
+        tfFirstName.setText(contact.getFirstName());
+        tfLastName.setText(contact.getLastName());
+        tfEmail.setText(contact.getEmail());
+        tfPhone.setText(contact.getPhoneNumber());
     }
 
     public void clearControlTexts() {
-        tfId.setText("");
-        tfName.setText("");
-        tfDesc.setText("");
+        tfFirstName.setText("");
+        tfLastName.setText("");
+        tfEmail.setText("");
+        tfPhone.setText("");
     }
 
     public void onMouseClicked(MouseEvent mouseEvent) {
-        product = lvProducts.getSelectionModel().getSelectedItem();
-        if(product == null) {
+        contact = lvContacts.getSelectionModel().getSelectedItem();
+        if(contact == null) {
             return;
         }
-        tfId.setText(Integer.toString(product.getId()));
-        setControlTexts(product);
-        System.out.println("clicked on " + product);
+        setControlTexts(contact);
+        System.out.println("clicked on " + contact);
     }
 
     public void onCreate(ActionEvent actionEvent) {
-        System.out.println("ProdmanController:onNewProduct ");
+        System.out.println("ProdmanController:onNewContact ");
         Node node = ((Node) (actionEvent.getSource()));
         Scene currentScene = node.getScene();
         Window window = currentScene.getWindow();
         window.hide();
         try {
             if(createViewScene == null) {
-                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("create-product.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("create-contact.fxml"));
                 Parent root = fxmlLoader.load();
-                createProductController = fxmlLoader.getController();
-                createProductController.setStage(this.stage);
-                createProductController.setParentScene(currentScene);
-                createProductController.setProductService(productService);
-                createProductController.setProdManController(this);
+                createContactController = fxmlLoader.getController();
+                createContactController.setStage(this.stage);
+                createContactController.setParentScene(currentScene);
+                createContactController.setContactService(contactService);
+                createContactController.setProdManController(this);
                 createViewScene = new Scene(root, 300, 600);
-                stage.setTitle("Manage Product");
+                stage.setTitle("Manage Contact");
                 stage.setScene(createViewScene);
                 stage.show();
             } else {
                 stage.setScene(createViewScene);
                 stage.show();
             }
-            createProductController.clearControlTexts();
+            createContactController.clearControlTexts();
             clearControlTexts();
         } catch(Exception ex) {
             System.out.println("ProdmanController: " + ex.getMessage());
@@ -152,17 +157,17 @@ public class ProdManController implements Initializable {
         window.hide();
         try {
             if(updateViewScene == null) {
-                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("update-product.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("update-contact.fxml"));
                 Parent root = fxmlLoader.load();
-                updateProductController = fxmlLoader.getController();
-                updateProductController.setController(this);
-                updateProductController.setStage(this.stage);
-                updateProductController.setParentScene(currentScene);
+                updateContactController = fxmlLoader.getController();
+                updateContactController.setController(this);
+                updateContactController.setStage(this.stage);
+                updateContactController.setParentScene(currentScene);
                 updateViewScene = new Scene(root, 300, 600);
             } else {
-                updateProductController.refresh();
+                updateContactController.refresh();
             }
-            stage.setTitle("Update Product");
+            stage.setTitle("Update Contact");
             stage.setScene(updateViewScene);
             stage.show();
         } catch(Exception ex) {
@@ -178,17 +183,17 @@ public class ProdManController implements Initializable {
         window.hide();
         try {
             if(deleteViewScene == null) {
-                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("delete-product.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(SplashApp.class.getResource("delete-contact.fxml"));
                 Parent root = fxmlLoader.load();
-                deleteProductController = fxmlLoader.getController();
-                deleteProductController.setController(this);
-                deleteProductController.setStage(this.stage);
-                deleteProductController.setParentScene(currentScene);
+                deleteContactController = fxmlLoader.getController();
+                deleteContactController.setController(this);
+                deleteContactController.setStage(this.stage);
+                deleteContactController.setParentScene(currentScene);
                 deleteViewScene = new Scene(root, 300, 600);
             } else {
-                deleteProductController.refresh();
+                deleteContactController.refresh();
             }
-            stage.setTitle("Delete Product");
+            stage.setTitle("Delete Contact");
             stage.setScene(deleteViewScene);
             stage.show();
         } catch(Exception ex) {

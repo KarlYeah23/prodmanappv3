@@ -35,7 +35,7 @@ public class SplashController implements Initializable {
         productImage.setImage(image);
     }
 
-   @javafx.fxml.FXML
+    @javafx.fxml.FXML
     public void onProceed(ActionEvent actionEvent) {
         System.out.println("SplashApp:onClose ");
         Node node = ((Node) (actionEvent.getSource()));
@@ -47,11 +47,11 @@ public class SplashController implements Initializable {
             ProdManController prodManController  = fxmlLoader.getController();
             prodManController.setStage(stage);
             Scene scene = new Scene(root, 300, 600);
-            stage.setTitle("Product Management");
+            stage.setTitle("Phone Book");
             stage.setScene(scene);
             stage.show();
         } catch (Exception ex) {
-            System.out.println("Error occured" + ex.getMessage());
+            System.out.println("Error occured " + ex.getMessage());
         }
     }
 }

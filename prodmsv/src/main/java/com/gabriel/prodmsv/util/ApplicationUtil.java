@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ApplicationUtil {
 
-    private final String prodServiceUrl;
+    private final String contactServiceUrl;
 
-    public ApplicationUtil(@Value("${service.api.endpoint}") final String prodServiceUrl){
-        this.prodServiceUrl = prodServiceUrl;
+    public ApplicationUtil(@Value("${service.api.endpoint}") final String contactServiceUrl){
+        this.contactServiceUrl = contactServiceUrl;
     }
 }
