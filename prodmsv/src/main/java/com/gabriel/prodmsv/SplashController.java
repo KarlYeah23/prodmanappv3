@@ -31,7 +31,7 @@ public class SplashController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        image = new Image(getClass().getResourceAsStream("/images/wink.gif"));
+        image = new Image(getClass().getResourceAsStream("/images/wink.png"));
         productImage.setImage(image);
     }
 

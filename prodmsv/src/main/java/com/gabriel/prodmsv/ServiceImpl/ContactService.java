@@ -17,7 +17,7 @@ public class ContactService {
     Logger logger = LoggerFactory.getLogger(ContactService.class);
     static ContactService service = null;
     @Value("${service.api.endpoint}")
-    private String endpointUrl = "http://localhost:8080/api/contact";
+    private String endpointUrl = "http://localhost:3306/api/contact";
     RestTemplate restTemplate = null;
 
     public static ContactService getService() {

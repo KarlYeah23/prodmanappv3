@@ -98,8 +98,8 @@ public class ProdManController implements Initializable {
         try {
             refresh();
             try {
-                puffy = new Image(getClass().getResourceAsStream("/images/puffy.gif"));
-                wink = new Image(getClass().getResourceAsStream("/images/wink.gif"));
+                puffy = new Image(getClass().getResourceAsStream("/images/puffy.png"));
+                wink = new Image(getClass().getResourceAsStream("/images/wink.png"));
                 contactImage.setImage(puffy);
             } catch (Exception ex) {
                 System.out.println("Error with image: " + ex.getMessage());

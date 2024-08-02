@@ -1,6 +1,6 @@
 service:
   api:
-    endpoint: http://localhost:8080/api/product
+    endpoint: http://localhost:3306/api/product
 logging:
   level:
     com:

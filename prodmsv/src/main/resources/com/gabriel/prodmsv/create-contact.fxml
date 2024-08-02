@@ -21,7 +21,7 @@
          <VBox.margin>
             <Insets bottom="10.0" />
          </VBox.margin>
-         <Image url="@../../../images/g.gif" />
+         <Image url="@../../../images/g.png" />
       </ImageView>
       <HBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0">
          <children>

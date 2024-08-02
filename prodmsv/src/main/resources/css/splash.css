@@ -1,17 +1,78 @@
-.root{
-    -fx-background-color: Pink;
-    -fx-alignment:center;
+.root {
+    -fx-background-color: #2C2C2C; /* Dark Gray */
+    -fx-alignment: center;
 }
 
-#textArea{
-   -fx-text-fill: Blue;
-   -fx-font-size: 20;
-
+#textArea {
+    -fx-text-fill: black; /* Light Gray */
+    -fx-font-size: 13;
+    -fx-background-color: #3A3A3A; /* Medium Gray */
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
 }
 
-#pane{
-   -fx-border-style:solid;
-   -fx-border-width:10;
-   -fx-border-color:Black;
+#pane {
+    -fx-border-style: solid;
+    -fx-border-width: 10;
+    -fx-border-color: #D3D3D3;
+    -fx-background-color: #3A3A3A;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
 
+.button {
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: #D3D3D3;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.label {
+    -fx-text-fill: #D3D3D3;
+}
+
+.text-field {
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: #D3D3D3;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.list-view {
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: #D3D3D3;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.table-view {
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: #D3D3D3;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.scroll-pane {
+    -fx-background-color: #3A3A3A;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.tab-pane {
+    -fx-background-color: #3A3A3A;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
+}
+
+.menu-bar {
+    -fx-background-color: #3A3A3A;
+    -fx-border-color: #D3D3D3;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.3) , 10, 0.5 , 0 , 0 );
 }
