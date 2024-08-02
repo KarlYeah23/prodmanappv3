@@ -3,6 +3,9 @@ package com.gabriel.prodmsv;
 import com.gabriel.prodmsv.ServiceImpl.ContactService;
 import com.gabriel.prodmsv.model.Contact;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,7 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 @Data
@@ -62,13 +66,18 @@ public class ProdManController implements Initializable {
     CreateContactController createContactController;
     ContactService contactService;
 
+    private ObservableList<Contact> contactList;
+
     void refresh() throws Exception {
         contactService = ContactService.getService();
         Contact[] contacts = contactService.getContacts(); // Updated method name
-        lvContacts.getItems().clear();
-        lvContacts.getItems().addAll(contacts);
-    }
+        contactList = FXCollections.observableArrayList(contacts);
 
+        SortedList<Contact> sortedList = new SortedList<>(contactList);
+        sortedList.setComparator(Comparator.comparing(Contact::getFirstName));
+
+        lvContacts.setItems(sortedList);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

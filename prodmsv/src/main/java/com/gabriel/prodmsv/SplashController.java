@@ -46,7 +46,7 @@ public class SplashController implements Initializable {
             Parent root = (Parent)fxmlLoader.load();
             ProdManController prodManController  = fxmlLoader.getController();
             prodManController.setStage(stage);
-            Scene scene = new Scene(root, 300, 600);
+            Scene scene = new Scene(root, 350, 600);
             stage.setTitle("Phone Book");
             stage.setScene(scene);
             stage.show();

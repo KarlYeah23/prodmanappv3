@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Setter;
@@ -55,28 +56,33 @@ public class CreateContactController implements Initializable {
         tfEmail.setText("");
     }
 
-    public void onNext(ActionEvent actionEvent) {
-        System.out.println("CreateContactController:onBack ");
-        Node node = ((Node) (actionEvent.getSource()));
-        Window window = node.getScene().getWindow();
-        window.hide();
+    @FXML
+    private void onSubmit(ActionEvent actionEvent) {
+        String phoneNumber = tfPhoneNumber.getText();
+        String email = tfEmail.getText();
 
-        stage.setScene(parentScene);
-        stage.show();
-    }
-
-    public void onSubmit(ActionEvent actionEvent) throws Exception {
-        Contact contact = new Contact();
-        contact.setFirstName(tfFirstName.getText());
-        contact.setLastName(tfLastName.getText());
-        contact.setPhoneNumber(tfPhoneNumber.getText());
-        contact.setEmail(tfEmail.getText());
-        try {
-            contact = contactService.create(contact);
-            prodManController.refresh();
-            onBack(actionEvent);
-        } catch (Exception ex) {
-            System.out.println("CreateContactController:onSubmit Error: " + ex.getMessage());
+        if (isValidPhoneNumber(phoneNumber) && isValidEmail(email)) {
+            Contact contact = new Contact();
+            contact.setFirstName(tfFirstName.getText());
+            contact.setLastName(tfLastName.getText());
+            contact.setPhoneNumber(phoneNumber);
+            contact.setEmail(email);
+            try {
+                contact = contactService.create(contact);
+                prodManController.refresh();
+                onBack(actionEvent);
+            } catch (Exception ex) {
+                System.out.println("CreateContactController:onSubmit Error: " + ex.getMessage());
+            }
+        } else {
+            StringBuilder errorMessage = new StringBuilder("Invalid input:\n");
+            if (!isValidPhoneNumber(phoneNumber)) {
+                errorMessage.append("- Phone Number is invalid.\n");
+            }
+            if (!isValidEmail(email)) {
+                errorMessage.append("- Email is invalid.\n");
+            }
+            showErrorDialog(errorMessage.toString());
         }
     }
 
@@ -88,5 +94,21 @@ public class CreateContactController implements Initializable {
 
         stage.setScene(parentScene);
         stage.show();
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("\\d{11}");
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && (email.endsWith("@gmail.com") || email.endsWith("@mymail.mapua.edu.ph"));
+    }
+
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

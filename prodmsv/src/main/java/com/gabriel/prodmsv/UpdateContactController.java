@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.Setter;
@@ -62,6 +61,10 @@ public class UpdateContactController implements Initializable {
     @FXML
     public void onSubmit(ActionEvent actionEvent) {
         try {
+            if (contactService == null) {
+                throw new IllegalStateException("ContactService is not initialized");
+            }
+
             Contact contact = toObject();
             contact.setId(contactId); // Ensure ID is set
             contact = contactService.update(contact);
@@ -80,8 +83,12 @@ public class UpdateContactController implements Initializable {
         Window window = node.getScene().getWindow();
         window.hide();
 
-        stage.setScene(parentScene);
-        stage.show();
+        if (stage != null && parentScene != null) {
+            stage.setScene(parentScene);
+            stage.show();
+        } else {
+            showErrorDialog("Error", "Stage or parent scene is not initialized.");
+        }
     }
 
     protected Contact toObject() {
