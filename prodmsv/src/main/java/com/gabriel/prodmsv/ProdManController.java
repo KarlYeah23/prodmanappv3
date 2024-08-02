@@ -68,6 +68,9 @@ public class ProdManController implements Initializable {
     @FXML
     private ListView<Contact> lvContacts;
 
+    private FilteredList<Contact> filteredContacts;
+    private SortedList<Contact> sortedContacts;
+
     UpdateContactController updateContactController;
     DeleteContactController deleteContactController;
     CreateContactController createContactController;
@@ -85,6 +88,8 @@ public class ProdManController implements Initializable {
 
         lvContacts.setItems(sortedList);
     }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -104,11 +109,15 @@ public class ProdManController implements Initializable {
             cbFilter.getSelectionModel().selectFirst();
             tfSearch.setOnKeyReleased(this::onSearch);
 
+            filteredContacts = new FilteredList<>(lvContacts.getItems(), p -> true);
+            SortedList<Contact> sortedContacts = new SortedList<>(filteredContacts);
+            sortedContacts.setComparator(Comparator.comparing(Contact::getFirstName));
+            lvContacts.setItems(sortedContacts);
+
         } catch (Exception ex) {
             showErrorDialog("Message: " + ex.getMessage());
         }
     }
-
 
     public void disableControls() {
         tfFirstName.editableProperty().set(false);
@@ -236,7 +245,7 @@ public class ProdManController implements Initializable {
         String filter = cbFilter.getValue();
         String searchText = tfSearch.getText().toLowerCase();
 
-        FilteredList<Contact> filteredContacts = new FilteredList<>(lvContacts.getItems(), contact -> {
+        filteredContacts.setPredicate(contact -> {
             if (searchText == null || searchText.isEmpty()) {
                 return true;
             }
@@ -253,10 +262,10 @@ public class ProdManController implements Initializable {
                     return true;
             }
         });
+    }
 
-        SortedList<Contact> sortedContacts = new SortedList<>(filteredContacts);
-        sortedContacts.setComparator(Comparator.comparing(Contact::getFirstName));
-        lvContacts.setItems(sortedContacts);
+    private void sortListView() {
+        lvContacts.getItems().sort(Comparator.comparing(Contact::getFirstName));
     }
 
     private void showErrorDialog(String message) {
