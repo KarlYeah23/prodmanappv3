@@ -262,6 +262,7 @@ public class ProdManController implements Initializable {
                     return true;
             }
         });
+        lvContacts.setItems(filteredContacts);
     }
 
     private void sortListView() {
