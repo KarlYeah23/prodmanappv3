@@ -3,6 +3,7 @@ package com.gabriel.prodmsv;
 import com.gabriel.prodmsv.ServiceImpl.ContactService;
 import com.gabriel.prodmsv.model.Contact;
 import javafx.application.Platform;
+import javafx.collections.transformation.FilteredList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -17,9 +18,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import java.util.Comparator;
 import lombok.Data;
 import lombok.Setter;
 
@@ -48,6 +51,10 @@ public class ProdManController implements Initializable {
     Image puffy;
     Image wink;
 
+    @FXML
+    private ComboBox<String> cbFilter;
+    @FXML
+    private TextField tfSearch;
     @FXML
     public Button createButton;
     @FXML
@@ -83,20 +90,25 @@ public class ProdManController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("ProdManController: initialize");
         disableControls();
-
         try {
             refresh();
             try {
                 puffy = new Image(getClass().getResourceAsStream("/images/puffy.gif"));
                 wink = new Image(getClass().getResourceAsStream("/images/wink.gif"));
                 contactImage.setImage(puffy);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("Error with image: " + ex.getMessage());
             }
+
+            cbFilter.getItems().addAll("First Name", "Last Name", "Phone Number", "Email");
+            cbFilter.getSelectionModel().selectFirst();
+            tfSearch.setOnKeyReleased(this::onSearch);
+
         } catch (Exception ex) {
             showErrorDialog("Message: " + ex.getMessage());
         }
     }
+
 
     public void disableControls() {
         tfFirstName.editableProperty().set(false);
@@ -218,6 +230,33 @@ public class ProdManController implements Initializable {
                 Platform.exit();
             }
         });
+    }
+
+    private void onSearch(KeyEvent event) {
+        String filter = cbFilter.getValue();
+        String searchText = tfSearch.getText().toLowerCase();
+
+        FilteredList<Contact> filteredContacts = new FilteredList<>(lvContacts.getItems(), contact -> {
+            if (searchText == null || searchText.isEmpty()) {
+                return true;
+            }
+            switch (filter) {
+                case "First Name":
+                    return contact.getFirstName().toLowerCase().contains(searchText);
+                case "Last Name":
+                    return contact.getLastName().toLowerCase().contains(searchText);
+                case "Phone Number":
+                    return contact.getPhoneNumber().toLowerCase().contains(searchText);
+                case "Email":
+                    return contact.getEmail().toLowerCase().contains(searchText);
+                default:
+                    return true;
+            }
+        });
+
+        SortedList<Contact> sortedContacts = new SortedList<>(filteredContacts);
+        sortedContacts.setComparator(Comparator.comparing(Contact::getFirstName));
+        lvContacts.setItems(sortedContacts);
     }
 
     private void showErrorDialog(String message) {
